@@ -2,7 +2,10 @@ import numpy as np
 import tensorflow as tf
 import pandas as pd
 # PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked
-
+# TBD:
+# 1. Add more features
+# 2. Add more layers/neurons
+# 3. Add regularization
 
 def start():
     train_data, test_data = load_data()
