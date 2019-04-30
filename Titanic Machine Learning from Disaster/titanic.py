@@ -12,26 +12,44 @@ from sklearn.preprocessing import OneHotEncoder
 
 def start():
     dev_data, x_test = load_data()
-    #x_train, x_validation, y_train, y_validation = split_train_validation(dev_data)
-    y_train = dev_data['Survived']
-    x_train = dev_data.drop(['Survived'], axis=1)
+    # x_train, x_validation, y_train, y_validation = split_train_validation(dev_data)
+    y_dev = dev_data['Survived']
+    x_dev = dev_data.drop(['Survived'], axis=1)
     scaling_info = extract_scaling_info(dev_data)
     encoders = generate_one_hot_encoders()
-    x_train = clean_data(x_train, scaling_info, encoders)
-    y_train = y_train.values.reshape(1, -1)
+    x_train = clean_data(x_dev, scaling_info, encoders)
+    y_train = y_dev.values.reshape(1, -1)
+
     # x_validation = clean_data(x_validation, scaling_info, encoders)
     # y_validation = y_validation.values.reshape(1, -1)
-    #parameters = model(x_train, y_train, x_validation, y_validation)
 
+    # parameters = model(x_train, y_train, x_validation, y_validation, learning_rate=0.001, regularization=0.0003)
+    # predictions = predict(x_validation, parameters).transpose()
+    # int_prediction = []
+    # for i in range(predictions.shape[0]):
+    #     if predictions[i] > 0.5:
+    #         int_prediction.append(1)
+    #     else:
+    #         int_prediction.append(0)
+    # check_performance(int_prediction, y_validation[0])
+
+    # int_prediction = []
+    # for i in range(predictions.shape[0]):
+    #     if predictions[i] > 0.5:
+    #         int_prediction.append(1)
+    #     else:
+    #         int_prediction.append(0)
+    #
+
+    #Determine the best learning rate and regularization parameter
+    #parameters = model(x_train, y_train)
     # learning_rates = [0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1]
-    # regularizations = [0, 0.00001, 0.00003, 0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1]
+    # # regularizations = [0, 0.00001, 0.00003, 0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1]
     # for learning_rate in learning_rates:
-    #     for regularization in regularizations:
-    #         tf.reset_default_graph()
-    #         model(x_train, y_train, x_validation, y_validation, learning_rate=learning_rate, regularization=regularization)
+    #     tf.reset_default_graph()
+    #     model(x_train, y_train, x_validation, y_validation, learning_rate=learning_rate, regularization=0)
 
-    tf.reset_default_graph()
-    parameters = model(x_train, y_train, learning_rate=0.003, regularization=0.0003)
+    parameters = model(x_train, y_train, learning_rate=0.001, regularization=0.0003)
     csv_output = x_test['PassengerId'].to_frame()
     x_test = clean_data(x_test, scaling_info, encoders)
     predictions = predict(x_test, parameters).transpose()
@@ -43,6 +61,19 @@ def start():
             int_prediction.append(0)
     csv_output['Survived'] = int_prediction
     csv_output.to_csv('result.csv', index=False)
+
+
+def check_performance(predictions, y_validation):
+    false_positive = 0
+    false_negative = 0
+    for i in range(y_validation.shape[0]):
+        if predictions[i] != y_validation[i]:
+            if predictions[i] == 1:
+                false_positive += 1
+            else:
+                false_negative += 1
+    print(false_positive)
+    print(false_negative)
 
 
 def load_data():
@@ -132,18 +163,19 @@ def clean_cabin(cabins):
 
 def initialize_parameters(n_X):
     tf.set_random_seed(1)
-    W1 = tf.get_variable('W1', [25, n_X], initializer=tf.contrib.layers.xavier_initializer(seed=1))
-    b1 = tf.get_variable('b1', [25, 1], initializer=tf.zeros_initializer())
-    W2 = tf.get_variable('W2', [5, 25], initializer=tf.contrib.layers.xavier_initializer(seed=1))
-    b2 = tf.get_variable('b2', [5, 1], initializer=tf.zeros_initializer())
-    W3 = tf.get_variable('W3', [1, 5], initializer=tf.contrib.layers.xavier_initializer(seed=1))
+    W1 = tf.get_variable('W1', [10, n_X], initializer=tf.contrib.layers.xavier_initializer(seed=1))
+    b1 = tf.get_variable('b1', [10, 1], initializer=tf.zeros_initializer())
+    W2 = tf.get_variable('W2', [10, 10], initializer=tf.contrib.layers.xavier_initializer(seed=1))
+    b2 = tf.get_variable('b2', [10, 1], initializer=tf.zeros_initializer())
+    W3 = tf.get_variable('W3', [1, 10], initializer=tf.contrib.layers.xavier_initializer(seed=1))
     b3 = tf.get_variable('b3', [1, 1], initializer=tf.zeros_initializer())
     parameters = {'W1': W1,
                   'b1': b1,
                   'W2': W2,
                   'b2': b2,
                   'W3': W3,
-                  'b3': b3}
+                  'b3': b3,
+                  }
     return parameters
 
 
@@ -155,20 +187,20 @@ def forward_propagation(X, parameters):
     W3 = parameters['W3']
     b3 = parameters['b3']
     Z1 = tf.matmul(W1, X) + b1
-    A1 = tf.nn.relu(Z1)
+    A1 = tf.nn.leaky_relu(Z1)
     Z2 = tf.matmul(W2, A1) + b2
-    A2 = tf.nn.relu(Z2)
+    A2 = tf.nn.leaky_relu(Z2)
     Z3 = tf.matmul(W3, A2) + b3
-    Z3 = tf.sigmoid(Z3)
     return Z3
 
 
 def compute_cost(parameters, Z3, Y, regularizer_coefficient):
     logits = tf.transpose(Z3)
     labels = tf.transpose(Y)
-    cost = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=logits, labels=labels))
+    sigmoid_cost = tf.nn.sigmoid_cross_entropy_with_logits(logits=logits, labels=labels)
+    #sigmoid_cost = tf.nn.weighted_cross_entropy_with_logits(logits=logits, targets=labels, pos_weight=1)
     regularizer = tf.nn.l2_loss(parameters['W1'])+tf.nn.l2_loss(parameters['W2'])+tf.nn.l2_loss(parameters['W3'])
-    cost = tf.reduce_mean(cost +  regularizer_coefficient * regularizer)
+    cost = tf.reduce_mean(sigmoid_cost + regularizer_coefficient * regularizer)
     return cost
 
 
@@ -178,13 +210,12 @@ def create_placeholders(n_x, n_y):
     return X, Y
 
 
-def model(X_train, Y_train, learning_rate=0.001, regularization=0,
-          num_epochs=20000):
+def model(X_train, Y_train, X_test=[], Y_test=[], learning_rate=0.003, regularization=0,
+          num_epochs=30000):
     tf.set_random_seed(1)
     seed = 3
     (n_x, m) = X_train.shape
     n_y = Y_train.shape[0]
-    costs = []
     X, Y = create_placeholders(n_x, n_y)
     parameters = initialize_parameters(n_x)
     Z3 = forward_propagation(X, parameters)
@@ -196,13 +227,16 @@ def model(X_train, Y_train, learning_rate=0.001, regularization=0,
         for epoch in range(num_epochs):
             seed = seed + 1
             _, epoch_cost = sess.run([optimizer, cost], feed_dict={X: X_train, Y: Y_train})
+            if seed%1000 == 0:
+                print('Cost: ', epoch_cost)
         parameters = sess.run(parameters)
+        Z3 = tf.nn.sigmoid(Z3)
         correct_prediction = tf.equal(tf.round(Z3), Y)
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, 'float'))
         print('Learning Rate: ', learning_rate)
         print('Regularization: ', regularization)
         print('Train Accuracy:', accuracy.eval({X: X_train, Y: Y_train}))
-        # print('Test Accuracy:', accuracy.eval({X: X_test, Y: Y_test}))
+        #print('Test Accuracy:', accuracy.eval({X: X_test, Y: Y_test}))
         print()
         return parameters
 
@@ -224,6 +258,7 @@ def predict(X, parameters):
 
     x = tf.placeholder('float', [X.shape[0], X.shape[1]])
     z3 = forward_propagation(x, params)
+    z3 = tf.nn.sigmoid(z3)
     p = tf.round(z3)
     sess = tf.Session()
     prediction = sess.run(p, feed_dict={x: X})

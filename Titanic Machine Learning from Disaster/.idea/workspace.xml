@@ -13,8 +13,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/titanic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1543">
-              <caret line="136" column="33" lean-forward="true" selection-start-line="136" selection-start-column="33" selection-end-line="136" selection-end-column="33" />
+            <state relative-caret-position="3565">
+              <caret line="238" column="9" selection-start-line="238" selection-start-column="9" selection-end-line="238" selection-end-column="9" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -141,7 +141,7 @@
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24262735" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24932976" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -214,14 +214,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/result.csv">
-      <provider selected="true" editor-type-id="csv-text-editor" />
       <provider editor-type-id="csv-table-editor">
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3" />
       </provider>
+      <provider selected="true" editor-type-id="csv-text-editor" />
       <provider editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/test.csv">
-      <provider editor-type-id="csv-text-editor" />
       <provider selected="true" editor-type-id="csv-table-editor">
         <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
           <column index="0" width="100" />
@@ -237,31 +236,8 @@
           <column index="10" width="100" />
         </state>
       </provider>
+      <provider editor-type-id="csv-text-editor" />
       <provider editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/train.csv">
-      <provider editor-type-id="csv-text-editor" />
-      <provider selected="true" editor-type-id="csv-table-editor">
-        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
-          <column index="0" width="100" />
-          <column index="1" width="100" />
-          <column index="2" width="100" />
-          <column index="3" width="100" />
-          <column index="4" width="100" />
-          <column index="5" width="100" />
-          <column index="6" width="100" />
-          <column index="7" width="100" />
-          <column index="8" width="100" />
-          <column index="9" width="100" />
-          <column index="10" width="100" />
-          <column index="11" width="100" />
-        </state>
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state>
-          <caret column="20" lean-forward="true" selection-start-column="12" selection-end-column="20" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/site-packages/pandas/core/internals/blocks.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -298,10 +274,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/train.csv">
+      <provider selected="true" editor-type-id="csv-table-editor">
+        <state showInfoPanel="true" fixedHeaders="false" rowLines="3">
+          <column index="0" width="100" />
+          <column index="1" width="100" />
+          <column index="2" width="100" />
+          <column index="3" width="100" />
+          <column index="4" width="100" />
+          <column index="5" width="100" />
+          <column index="6" width="100" />
+          <column index="7" width="100" />
+          <column index="8" width="100" />
+          <column index="9" width="100" />
+          <column index="10" width="100" />
+          <column index="11" width="100" />
+        </state>
+      </provider>
+      <provider editor-type-id="csv-text-editor" />
+      <provider editor-type-id="text-editor">
+        <state>
+          <caret column="20" lean-forward="true" selection-start-column="12" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/titanic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1543">
-          <caret line="136" column="33" lean-forward="true" selection-start-line="136" selection-start-column="33" selection-end-line="136" selection-end-column="33" />
+        <state relative-caret-position="3565">
+          <caret line="238" column="9" selection-start-line="238" selection-start-column="9" selection-end-line="238" selection-end-column="9" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
